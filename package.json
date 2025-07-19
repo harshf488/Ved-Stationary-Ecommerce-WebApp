@@ -4,9 +4,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+     "build": "vite build",
+    "preview": "vite preview",    
+    "dev:backend": "nodemon server/create-order.js",
+    "dev:frontend": "vite",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\""
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.0.5",
