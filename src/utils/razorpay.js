@@ -20,7 +20,7 @@ export const initializeRazorpayPayment = (orderData, onSuccess, onError) => {
 const createRazorpayOrder = async (orderData, onSuccess, onError) => {
   try {
     // Call your backend API to create a Razorpay order
-    const response = await fetch('http://localhost:3001/api/create-order', {
+    const response = await fetch('http://localhost:3001/create-order/api', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -38,6 +38,7 @@ const createRazorpayOrder = async (orderData, onSuccess, onError) => {
 
     const order = await response.json();
 
+
     const options = {
       key: 'rzp_test_7VpdGBzTReIP2W', // Your Razorpay key
       amount: order.amount, // Use amount from backend response
@@ -45,13 +46,8 @@ const createRazorpayOrder = async (orderData, onSuccess, onError) => {
       name: 'Ved Stationary and Graphics',
       description: `Order fx`,
       order_id: order.id, // Use the actual order ID from backend
-      handler: function(response) {
-        onSuccess({
-          razorpay_payment_id: response.razorpay_payment_id,
-          razorpay_order_id: response.razorpay_order_id,
-          razorpay_signature: response.razorpay_signature
-        });
-      },
+
+
       prefill: {
         name: orderData.customerName,
         email: orderData.customerEmail,
@@ -63,9 +59,31 @@ const createRazorpayOrder = async (orderData, onSuccess, onError) => {
       theme: {
         color: '#4f46e5'
       },
-      "handler": function (response){
-   window.location.href = "/"
+     handler: async function (response){
+
+const body = {
+  ...response,
+}
+ const validateRes = await fetch("http://localhost:3001/create-order/validate" ,{ 
+
+   method: 'POST',
+   body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      
+       
+    })
+   
+      alert("Payment is successful ! , You will be redirected after 5 seconds")
+       setTimeout(function() {
+          
+     window.location.href = "/"; // Replace with your target URL
+ }, 5000); // 9000 milliseconds = 9 seconds
+
   },
+
+ 
       modal: {
         ondismiss: function() {
           onError(new Error('Payment cancelled by user'));
