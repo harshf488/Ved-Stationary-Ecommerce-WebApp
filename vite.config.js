@@ -185,11 +185,20 @@ export default defineConfig({
 	customLogger: logger,
 	plugins: [react(), addTransformIndexHtml],
 	server: {
-		cors: true,
-		headers: {
-			'Cross-Origin-Embedder-Policy': 'credentialless',
-		},
-		allowedHosts: true,
+		// cors: true,
+		// headers: {
+		// 	'Cross-Origin-Embedder-Policy': 'credentialless',
+		// },
+		// allowedHosts: true,
+		 proxy: {
+      '/razorpay-api': {
+        target: 'https://api.razorpay.com',
+        changeOrigin: true, // Crucial for CORS bypassing
+        secure: false, // Set to true for production deployments with HTTPS certificates
+        rewrite: (path) => path.replace(/^\/razorpay-api/, '') // Rewrites the URL to remove the prefix when forwarding to Razorpay
+      },
+	}
+	
 	},
 	resolve: {
 		extensions: ['.jsx', '.js', '.tsx', '.ts', '.json', ],
