@@ -61,8 +61,6 @@ const createRazorpayOrder = async (orderData, onSuccess, onError) => {
       },
      handler: async function (response){
        
-
-
 const body = {
   ...response,
 }
